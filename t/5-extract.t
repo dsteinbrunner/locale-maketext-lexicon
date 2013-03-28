@@ -1083,7 +1083,7 @@ __EXAMPLE__
 
 #### BEGIN HAML TESTS ##########
 SKIP: {
-    skip( 'HAML unavailable', 1 ) unless eval { require Text::Haml };
+    skip( 'HAML unavailable', 5 ) unless eval { require Text::Haml };
 
     $Ext = Locale::Maketext::Extract->new( plugins => { haml => '*' } );
 

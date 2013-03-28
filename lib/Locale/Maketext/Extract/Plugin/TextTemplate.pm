@@ -2,13 +2,8 @@ package Locale::Maketext::Extract::Plugin::TextTemplate;
 
 use strict;
 use base qw(Locale::Maketext::Extract::Plugin::Base);
-use vars qw($VERSION);
 
-$VERSION = '0.31';
-
-=head1 NAME
-
-Locale::Maketext::Extract::Plugin::TextTemplate - Text::Template format parser
+# ABSTRACT: Text::Template format parser
 
 =head1 SYNOPSIS
 
@@ -45,34 +40,39 @@ sub file_types {
     return qw( * );
 }
 
-
 sub extract {
     my $self = shift;
     local $_ = shift;
 
-    my $line = 1; pos($_) = 0;
+    my $line = 1;
+    pos($_) = 0;
 
     # Text::Template
-    if ($_=~/^STARTTEXT$/m and $_=~ /^ENDTEXT$/m) {
+    if ( $_ =~ /^STARTTEXT$/m and $_ =~ /^ENDTEXT$/m ) {
         require HTML::Parser;
         require Lingua::EN::Sentence;
 
         {
+
             package Locale::Maketext::Extract::Plugin::TextTemplate::Parser;
             our @ISA = 'HTML::Parser';
             *{'text'} = sub {
-                my ($self, $str, $is_cdata) = @_;
-                my $sentences = Lingua::EN::Sentence::get_sentences($str) or return;
-                $str =~ s/\n/ /g; $str =~ s/^\s+//; $str =~ s/\s+$//;
-                $self->add_entry($str , $line);
+                my ( $self, $str, $is_cdata ) = @_;
+                my $sentences = Lingua::EN::Sentence::get_sentences($str)
+                    or return;
+                $str =~ s/\n/ /g;
+                $str =~ s/^\s+//;
+                $str =~ s/\s+$//;
+                $self->add_entry( $str, $line );
             };
         }
 
         my $p = Locale::Maketext::Extract::Plugin::TextTemplate::Parser->new;
         while (m/\G((.*?)^(?:START|END)[A-Z]+$)/smg) {
             my ($str) = ($2);
-            $line += ( () = ($1 =~ /\n/g) ); # cryptocontext!
-            $p->parse($str); $p->eof;
+            $line += ( () = ( $1 =~ /\n/g ) );    # cryptocontext!
+            $p->parse($str);
+            $p->eof;
         }
         $_ = '';
     }
@@ -112,7 +112,7 @@ Audrey Tang E<lt>cpan@audreyt.orgE<gt>
 
 =head1 COPYRIGHT
 
-Copyright 2002-2008 by Audrey Tang E<lt>cpan@audreyt.orgE<gt>.
+Copyright 2002-2013 by Audrey Tang E<lt>cpan@audreyt.orgE<gt>.
 
 This software is released under the MIT license cited below.
 
@@ -137,6 +137,5 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 
 =cut
-
 
 1;

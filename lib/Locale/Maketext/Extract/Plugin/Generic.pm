@@ -3,9 +3,7 @@ package Locale::Maketext::Extract::Plugin::Generic;
 use strict;
 use base qw(Locale::Maketext::Extract::Plugin::Base);
 
-=head1 NAME
-
-Locale::Maketext::Extract::Plugin::Generic - Generic template parser
+# ABSTRACT: Generic template parser
 
 =head1 SYNOPSIS
 
@@ -38,7 +36,6 @@ Strings inside {{...}} are extracted.
 
 =cut
 
-
 sub file_types {
     return qw( * );
 }
@@ -50,33 +47,38 @@ sub extract {
     my $line = 1;
 
     # Generic Template:
-    $line = 1; pos($_) = 0;
+    $line = 1;
+    pos($_) = 0;
     while (m/\G(.*?(?<!\{)\{\{(?!\{)(.*?)\}\})/sg) {
-        my ($vars, $str) = ('', $2);
-        $line += ( () = ($1 =~ /\n/g) ); # cryptocontext!
-        $self->add_entry($str, $line, $vars );
+        my ( $vars, $str ) = ( '', $2 );
+        $line += ( () = ( $1 =~ /\n/g ) );    # cryptocontext!
+        $self->add_entry( $str, $line, $vars );
     }
 
-    my $quoted = '(\')([^\\\']*(?:\\.[^\\\']*)*)(\')|(\")([^\\\"]*(?:\\.[^\\\"]*)*)(\")';
+    my $quoted
+        = '(\')([^\\\']*(?:\\.[^\\\']*)*)(\')|(\")([^\\\"]*(?:\\.[^\\\"]*)*)(\")';
 
     # Comment-based mark: "..." # loc
-    $line = 1; pos($_) = 0;
+    $line = 1;
+    pos($_) = 0;
     while (m/\G(.*?($quoted)[\}\)\],;]*\s*\#\s*loc\s*$)/smog) {
-        my $str = substr($2, 1, -1);
+        my $str = substr( $2, 1, -1 );
         $line += ( () = ( $1 =~ /\n/g ) );    # cryptocontext!
-        $str  =~ s/\\(["'])/$1/g;
-        $self->add_entry($str, $line, '' );
+        $str =~ s/\\(["'])/$1/g;
+        $self->add_entry( $str, $line, '' );
     }
 
     # Comment-based pair mark: "..." => "..." # loc_pair
-    $line = 1; pos($_) = 0;
-    while (m/\G(.*?(\w+)\s*=>\s*($quoted)[\}\)\],;]*\s*\#\s*loc_pair\s*$)/smg) {
+    $line = 1;
+    pos($_) = 0;
+    while (m/\G(.*?(\w+)\s*=>\s*($quoted)[\}\)\],;]*\s*\#\s*loc_pair\s*$)/smg)
+    {
         my $key = $2;
-        my $val = substr($3, 1, -1);
+        my $val = substr( $3, 1, -1 );
         $line += ( () = ( $1 =~ /\n/g ) );    # cryptocontext!
-        $key  =~ s/\\(["'])/$1/g;
-        $val  =~ s/\\(["'])/$1/g;
-        $self->add_entry($val,  $line, '' );
+        $key =~ s/\\(["'])/$1/g;
+        $val =~ s/\\(["'])/$1/g;
+        $self->add_entry( $val, $line, '' );
     }
 }
 
@@ -113,7 +115,7 @@ Audrey Tang E<lt>cpan@audreyt.orgE<gt>
 
 =head1 COPYRIGHT
 
-Copyright 2002-2008 by Audrey Tang E<lt>cpan@audreyt.orgE<gt>.
+Copyright 2002-2013 by Audrey Tang E<lt>cpan@audreyt.orgE<gt>.
 
 This software is released under the MIT license cited below.
 
@@ -138,6 +140,5 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 
 =cut
-
 
 1;

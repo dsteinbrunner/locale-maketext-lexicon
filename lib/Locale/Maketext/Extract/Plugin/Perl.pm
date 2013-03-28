@@ -4,9 +4,7 @@ use strict;
 
 use base qw(Locale::Maketext::Extract::Plugin::Base);
 
-=head1 NAME
-
-Locale::Maketext::Extract::Plugin::Perl - Perl format parser
+# ABSTRACT: Perl format parser
 
 =head1 SYNOPSIS
 
@@ -193,8 +191,7 @@ PARSER: {
             $state = NUL;
             $vars =~ s/[\n\r]//g if ($vars);
             $self->add_entry( $str,
-                              $line - ( () = $str =~ /\n/g ) - $line_offset,
-                              $vars )
+                $line - ( () = $str =~ /\n/g ) - $line_offset, $vars )
                 if $str;
             undef $str;
             undef $vars;
@@ -202,6 +199,7 @@ PARSER: {
             $line_offset = 0;
             redo;
         };
+
         # a line of vars
         $state == PAR && m/^([^\)]*)/gc && do { $vars .= "$1\n"; redo };
     }
@@ -242,7 +240,7 @@ Audrey Tang E<lt>cpan@audreyt.orgE<gt>
 
 =head1 COPYRIGHT
 
-Copyright 2002-2008 by Audrey Tang E<lt>cpan@audreyt.orgE<gt>.
+Copyright 2002-2013 by Audrey Tang E<lt>cpan@audreyt.orgE<gt>.
 
 This software is released under the MIT license cited below.
 

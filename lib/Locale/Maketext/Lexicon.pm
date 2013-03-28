@@ -1,12 +1,9 @@
 package Locale::Maketext::Lexicon;
-$Locale::Maketext::Lexicon::VERSION = '0.91';
 
 use 5.004;
 use strict;
 
-=head1 NAME
-
-Locale::Maketext::Lexicon - Use other catalog formats in Maketext
+# ABSTRACT: Use other catalog formats in Maketext
 
 =head1 VERSION
 
@@ -204,11 +201,10 @@ sub encoding {
         require I18N::Langinfo;
         $locale_encoding
             = I18N::Langinfo::langinfo( I18N::Langinfo::CODESET() );
-        }
-        or eval {
+    } or eval {
         require Win32::Console;
         $locale_encoding = 'cp' . Win32::Console::OutputCP();
-        };
+    };
     if ( !$locale_encoding ) {
         foreach my $key (qw( LANGUAGE LC_ALL LC_MESSAGES LANG )) {
             $ENV{$key} =~ /^([^.]+)\.([^.:]+)/ or next;
@@ -273,7 +269,7 @@ sub import {
             }
             delete $entries{$1}
                 unless !defined($1)
-                    or exists $entries{$1} and @{ $entries{$1} };
+                or exists $entries{$1} and @{ $entries{$1} };
         }
     }
 
@@ -554,7 +550,7 @@ Audrey Tang E<lt>cpan@audreyt.orgE<gt>
 
 =head1 COPYRIGHT
 
-Copyright 2002-2008 by Audrey Tang E<lt>cpan@audreyt.orgE<gt>.
+Copyright 2002-2013 by Audrey Tang E<lt>cpan@audreyt.orgE<gt>.
 
 This software is released under the MIT license cited below.
 

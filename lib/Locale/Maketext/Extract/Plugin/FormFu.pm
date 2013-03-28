@@ -3,9 +3,7 @@ package Locale::Maketext::Extract::Plugin::FormFu;
 use strict;
 use base qw(Locale::Maketext::Extract::Plugin::Base);
 
-=head1 NAME
-
-Locale::Maketext::Extract::Plugin::FormFu - FormFu format parser
+# ABSTRACT: FormFu format parser
 
 =head1 SYNOPSIS
 
@@ -106,9 +104,9 @@ sub _check_key {
         $str = $value;
     }
     return
-        unless $key
-            && $key =~ /_loc$/
-            && defined $str;
+           unless $key
+        && $key =~ /_loc$/
+        && defined $str;
     push @{ $self->{found} }, [ $str, $line, $vars ];
 }
 
@@ -252,7 +250,7 @@ Clinton Gormley E<lt>clint@traveljury.comE<gt>
 
 =head1 COPYRIGHT
 
-Copyright 2002-2008 by Audrey Tang E<lt>cpan@audreyt.orgE<gt>.
+Copyright 2002-2013 by Audrey Tang E<lt>cpan@audreyt.orgE<gt>.
 
 This software is released under the MIT license cited below.
 

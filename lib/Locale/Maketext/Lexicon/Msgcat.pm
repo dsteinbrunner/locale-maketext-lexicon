@@ -1,11 +1,8 @@
 package Locale::Maketext::Lexicon::Msgcat;
-$Locale::Maketext::Lexicon::Msgcat::VERSION = '0.03';
 
 use strict;
 
-=head1 NAME
-
-Locale::Maketext::Lexicon::Msgcat - Msgcat catalog parser Maketext
+# ABSTRACT: Msgcat catalog parser Maketext
 
 =head1 SYNOPSIS
 
@@ -38,7 +35,7 @@ calls to this lexicon will I<not> take any additional arguments.
 sub parse {
     my $set = 0;
     my $msg = undef;
-    my ($qr, $qq, $qc) = (qr//, '', '');
+    my ( $qr, $qq, $qc ) = ( qr//, '', '' );
     my @out;
 
     # Set up the msgcat handler
@@ -53,46 +50,46 @@ sub parse {
         s/[\015\012]*\z//;    # fix CRLF issues
 
         /^\$set (\d+)/
-          ? do {              # set_id
+            ? do {            # set_id
             $set = int($1);
             push @out, $1, "[msgcat,$1,_1]";
-          }
-          :
+            }
+            :
 
-          /^\$quote (.)/
-          ? do {              # quote character
+            /^\$quote (.)/
+            ? do {            # quote character
             $qc = $1;
             $qq = quotemeta($1);
             $qr = qr/$qq?/;
-          }
-          :
+            }
+            :
 
-          /^(\d+) ($qr)(.*?)\2(\\?)$/
-          ? do {              # msg_id and msg_str
+            /^(\d+) ($qr)(.*?)\2(\\?)$/
+            ? do {            # msg_id and msg_str
             local $^W;
             push @out, "$set," . int($1);
             if ($4) {
                 $msg = $3;
             }
             else {
-                push @out, unescape($qq, $qc, $3);
+                push @out, unescape( $qq, $qc, $3 );
                 undef $msg;
             }
-          }
-          :
+            }
+            :
 
-          (defined $msg and /^($qr)(.*?)\1(\\?)$/)
-          ? do {    # continued string
+            ( defined $msg and /^($qr)(.*?)\1(\\?)$/ )
+            ? do {    # continued string
             local $^W;
             if ($3) {
                 $msg .= $2;
             }
             else {
-                push @out, unescape($qq, $qc, $msg . $2);
+                push @out, unescape( $qq, $qc, $msg . $2 );
                 undef $msg;
             }
-          }
-          : ();
+            }
+            : ();
     }
 
     push @out, '' if defined $msg;
@@ -101,12 +98,12 @@ sub parse {
 }
 
 sub _msgcat {
-    my ($self, $set_id, $msg_id, @args) = @_;
-    return $self->maketext(int($set_id) . ',' . int($msg_id), @args);
+    my ( $self, $set_id, $msg_id, @args ) = @_;
+    return $self->maketext( int($set_id) . ',' . int($msg_id), @args );
 }
 
 sub unescape {
-    my ($qq, $qc, $str) = @_;
+    my ( $qq, $qc, $str ) = @_;
     $str =~ s/(\\([ntvbrf\\$qq]))/($2 eq $qc) ? $qc : eval qq("$1")/e;
     $str =~ s/([\~\[\]])/~$1/g;
     return $str;
@@ -124,7 +121,7 @@ Audrey Tang E<lt>cpan@audreyt.orgE<gt>
 
 =head1 COPYRIGHT
 
-Copyright 2002, 2003, 2004, 2007 by Audrey Tang E<lt>cpan@audreyt.orgE<gt>.
+Copyright 2002-2013 by Audrey Tang E<lt>cpan@audreyt.orgE<gt>.
 
 This software is released under the MIT license cited below.
 

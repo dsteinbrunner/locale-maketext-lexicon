@@ -1,12 +1,9 @@
 package Locale::Maketext::Extract;
-$Locale::Maketext::Extract::VERSION = '0.38';
 
 use strict;
 use Locale::Maketext::Lexicon();
 
-=head1 NAME
-
-Locale::Maketext::Extract - Extract translatable strings from source
+# ABSTRACT: Extract translatable strings from source
 
 =head1 SYNOPSIS
 
@@ -258,14 +255,14 @@ is not listed:
 =cut
 
 our %Known_Plugins = (
-                    perl => 'Locale::Maketext::Extract::Plugin::Perl',
-                    yaml => 'Locale::Maketext::Extract::Plugin::YAML',
-                    tt2  => 'Locale::Maketext::Extract::Plugin::TT2',
-                    text => 'Locale::Maketext::Extract::Plugin::TextTemplate',
-                    mason   => 'Locale::Maketext::Extract::Plugin::Mason',
-                    generic => 'Locale::Maketext::Extract::Plugin::Generic',
-                    formfu  => 'Locale::Maketext::Extract::Plugin::FormFu',
-                    haml    => 'Locale::Maketext::Extract::Plugin::Haml',
+    perl    => 'Locale::Maketext::Extract::Plugin::Perl',
+    yaml    => 'Locale::Maketext::Extract::Plugin::YAML',
+    tt2     => 'Locale::Maketext::Extract::Plugin::TT2',
+    text    => 'Locale::Maketext::Extract::Plugin::TextTemplate',
+    mason   => 'Locale::Maketext::Extract::Plugin::Mason',
+    generic => 'Locale::Maketext::Extract::Plugin::Generic',
+    formfu  => 'Locale::Maketext::Extract::Plugin::FormFu',
+    haml    => 'Locale::Maketext::Extract::Plugin::Haml',
 );
 
 sub new {
@@ -275,16 +272,17 @@ sub new {
         || { map { $_ => undef } keys %Known_Plugins };
 
     Locale::Maketext::Lexicon::set_option( 'keep_fuzzy' => 1 );
-    my $self = bless( {  header           => '',
-                         entries          => {},
-                         compiled_entries => {},
-                         lexicon          => {},
-                         warnings         => 0,
-                         verbose          => 0,
-                         wrap             => 0,
-                         %params,
-                      },
-                      $class
+    my $self = bless(
+        {   header           => '',
+            entries          => {},
+            compiled_entries => {},
+            lexicon          => {},
+            warnings         => 0,
+            verbose          => 0,
+            wrap             => 0,
+            %params,
+        },
+        $class
     );
     $self->{verbose} ||= 0;
     die "No plugins defined in new()"
@@ -348,7 +346,10 @@ sub plugins {
                 next;
             };
 
-            my $plugin = $params{$name} ? $plugin_class->new($params{$name}) : $plugin_class->new;
+            my $plugin
+                = $params{$name}
+                ? $plugin_class->new( $params{$name} )
+                : $plugin_class->new;
             push @plugins, $plugin;
         }
         $self->{plugins} = \@plugins;
@@ -415,7 +416,7 @@ sub msg_comment {
 }
 
 sub msg_fuzzy {
-    return $_[0]->{fuzzy}{$_[1]} ? ', fuzzy' : '';
+    return $_[0]->{fuzzy}{ $_[1] } ? ', fuzzy' : '';
 }
 
 sub set_comments {
@@ -450,7 +451,7 @@ sub write_po {
         print LEXICON $self->msg_variables($msgid);
         print LEXICON $self->msg_positions($msgid);
         my $flags = $self->msg_fuzzy($msgid);
-        $flags.= $self->msg_format($msgid) if $add_format_marker;
+        $flags .= $self->msg_format($msgid) if $add_format_marker;
         print LEXICON "#$flags\n" if $flags;
         print LEXICON $self->msg_out($msgid);
     }
@@ -482,9 +483,9 @@ sub extract {
 
     # If there's no plugin which can handle this file
     # specifically, fall back trying with all known plugins.
-    @plugins = @{$self->plugins} if not @plugins;
+    @plugins = @{ $self->plugins } if not @plugins;
 
-    foreach my $plugin ( @plugins ) {
+    foreach my $plugin (@plugins) {
         pos($content) = 0;
         my $success = eval { $plugin->extract($content); 1; };
         if ($success) {
@@ -505,9 +506,10 @@ sub extract {
                     # pad string
                     $string =~ s/\n/\n               /g;
                     push @messages,
-                        sprintf( qq[       - %-8s "%s" (%s)],
-                                 $line . ':',
-                                 $string, $vars
+                        sprintf(
+                        qq[       - %-8s "%s" (%s)],
+                        $line . ':',
+                        $string, $vars
                         ),
                         ;
                 }
@@ -529,7 +531,7 @@ sub extract {
     print STDERR " * $file\n   - Total strings extracted : $total"
         . ( $error_found ? ' [ERROR ] ' : '' ) . "\n"
         if $verbose
-            && ( $total || $error_found );
+        && ( $total || $error_found );
     print STDERR join( "\n", @messages ) . "\n"
         if @messages;
 
@@ -571,9 +573,10 @@ sub compile {
     my $comp    = $self->compiled_entries;
 
     while ( my ( $k, $v ) = each %$entries ) {
-        my $compiled_key = ( ($entries_are_in_gettext_style)
-                             ? $k
-                             : _maketext_to_gettext($k)
+        my $compiled_key = (
+            ($entries_are_in_gettext_style)
+            ? $k
+            : _maketext_to_gettext($k)
         );
         $comp->{$compiled_key}    = $v;
         $lexicon->{$compiled_key} = ''
@@ -598,7 +601,7 @@ sub normalize_space {
         unless ( !$self->has_msgid($msgid) and $self->has_msgid($nospace) );
 
     $self->set_msgstr( $msgid => $self->msgstr($nospace)
-                       . ( ' ' x ( length($msgid) - length($nospace) ) ) );
+            . ( ' ' x ( length($msgid) - length($nospace) ) ) );
 }
 
 =head2 Lexicon accessors
@@ -609,7 +612,8 @@ sub normalize_space {
 
 =cut
 
-sub msgids    { sort keys %{ $_[0]{lexicon} } }
+sub msgids { sort keys %{ $_[0]{lexicon} } }
+
 sub has_msgid {
     my $msg_str = $_[0]->msgstr( $_[1] );
     return defined $msg_str ? length $msg_str : 0;
@@ -618,7 +622,7 @@ sub has_msgid {
 sub msg_positions {
     my ( $self, $msgid ) = @_;
     my %files = ( map { ( " $_->[0]:$_->[1]" => 1 ) }
-                  $self->compiled_entry($msgid) );
+            $self->compiled_entry($msgid) );
     return $self->{wrap}
         ? join( "\n", ( map { '#:' . $_ } sort( keys %files ) ), '' )
         : join( '', '#:', sort( keys %files ), "\n" );
@@ -725,16 +729,17 @@ sub _format {
 }
 
 sub _plugins_specifically_for_file {
-    my ($self, $file) = @_;
+    my ( $self, $file ) = @_;
 
     return () if not $file;
 
     my @plugins = grep {
-        my $plugin = $_;
+        my $plugin     = $_;
         my @file_types = $plugin->file_types;
-        my $is_generic = (scalar @file_types == 1 and $file_types[0] eq '*');
-        (not $is_generic and $plugin->known_file_type($file));
-    } @{$self->plugins};
+        my $is_generic
+            = ( scalar @file_types == 1 and $file_types[0] eq '*' );
+        ( not $is_generic and $plugin->known_file_type($file) );
+    } @{ $self->plugins };
 
     return @plugins;
 }
@@ -759,7 +764,7 @@ Audrey Tang E<lt>cpan@audreyt.orgE<gt>
 
 =head1 COPYRIGHT
 
-Copyright 2003-2008 by Audrey Tang E<lt>cpan@audreyt.orgE<gt>.
+Copyright 2003-2013 by Audrey Tang E<lt>cpan@audreyt.orgE<gt>.
 
 This software is released under the MIT license cited below.
 

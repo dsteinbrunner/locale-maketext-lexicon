@@ -1,12 +1,9 @@
 package Locale::Maketext::Lexicon::Tie;
-$Locale::Maketext::Lexicon::Tie::VERSION = '0.05';
 
 use strict;
 use Symbol ();
 
-=head1 NAME
-
-Locale::Maketext::Lexicon::Tie - Use tied hashes as lexicons for Maketext
+# ABSTRACT: Use tied hashes as lexicons for Maketext
 
 =head1 SYNOPSIS
 
@@ -57,7 +54,7 @@ Audrey Tang E<lt>cpan@audreyt.orgE<gt>
 
 =head1 COPYRIGHT
 
-Copyright 2002, 2003, 2004, 2007 by Audrey Tang E<lt>cpan@audreyt.orgE<gt>.
+Copyright 2002-2013 by Audrey Tang E<lt>cpan@audreyt.orgE<gt>.
 
 This software is released under the MIT license cited below.
 

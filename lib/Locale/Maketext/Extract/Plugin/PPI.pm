@@ -4,9 +4,7 @@ use strict;
 use base qw(Locale::Maketext::Extract::Plugin::Base);
 use PPI();
 
-=head1 NAME
-
-Locale::Maketext::Extract::Plugin::PPI - Perl format parser
+# ABSTRACT: Perl format parser
 
 =head1 SYNOPSIS
 
@@ -86,15 +84,15 @@ sub extract {
         while ( my $child = shift @children ) {
             next
                 unless @children
-                    && (    $child->isa('PPI::Token::Word')
-                         && $subnames{ $child->content }
-                         || $child->isa('PPI::Token::Magic')
-                         && $child->content eq '_' );
+                && ( $child->isa('PPI::Token::Word')
+                && $subnames{ $child->content }
+                || $child->isa('PPI::Token::Magic')
+                && $child->content eq '_' );
 
             my $list = shift @children;
             next
                 unless $list->isa('PPI::Structure::List')
-                    && $list->schildren;
+                && $list->schildren;
 
             $self->_check_arg_list($list);
         }
@@ -114,7 +112,7 @@ sub _check_arg_list {
     while ( my $string_el = shift @args ) {
         return
             unless $string_el->isa('PPI::Token::Quote')
-                || $string_el->isa('PPI::Token::HereDoc');
+            || $string_el->isa('PPI::Token::HereDoc');
         $line ||= $string_el->location->[0];
         my $string;
         if ( $string_el->isa('PPI::Token::HereDoc') ) {
@@ -153,8 +151,8 @@ sub _check_arg_list {
         my $next_op = shift @args;
         last
             unless $next_op
-                && $next_op->isa('PPI::Token::Operator')
-                && $next_op->content eq '.';
+            && $next_op->isa('PPI::Token::Operator')
+            && $next_op->content eq '.';
     }
     return unless $final_string;
 
@@ -197,7 +195,7 @@ Audrey Tang E<lt>cpan@audreyt.orgE<gt>
 
 =head1 COPYRIGHT
 
-Copyright 2002-2008 by Audrey Tang E<lt>cpan@audreyt.orgE<gt>.
+Copyright 2002-2013 by Audrey Tang E<lt>cpan@audreyt.orgE<gt>.
 
 This software is released under the MIT license cited below.
 

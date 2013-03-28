@@ -4,9 +4,7 @@ use strict;
 
 use File::Basename qw(fileparse);
 
-=head1 NAME
-
-Locale::Maketext::Extract::Plugin::Base - Base module for format parser plugins
+# ABSTRACT: Base module for format parser plugins
 
 =head1 SYNOPSIS
 
@@ -53,9 +51,7 @@ as shown above.
 
 sub new {
     my $class = shift;
-    my $self = bless {
-        entries => [],
-    }, $class;
+    my $self = bless { entries => [], }, $class;
 
     $self->_compile_file_types(@_);
     return $self;
@@ -69,7 +65,7 @@ sub new {
 
 sub add_entry {
     my $self = shift;
-    push @{$self->{entries}},[@_];
+    push @{ $self->{entries} }, [@_];
 }
 
 =item C<entries()>
@@ -97,7 +93,7 @@ Clears all stored entries.
 sub clear {
 #===================================
     my $self = shift;
-    $self->{entries}=[];
+    $self->{entries} = [];
 }
 
 =item file_types()
@@ -166,8 +162,8 @@ sub _compile_file_types {
     my $self = shift;
     my @file_types
         = ref $_[0] eq 'ARRAY'
-            ? @{ shift @_ }
-            : @_;
+        ? @{ shift @_ }
+        : @_;
     @file_types = $self->file_types
         unless @file_types;
 
@@ -250,7 +246,7 @@ Clinton Gormley [DRTECH] E<lt>clinton@traveljury.comE<gt>
 
 =head1 COPYRIGHT
 
-Copyright 2002-2008 by Audrey Tang E<lt>cpan@audreyt.orgE<gt>.
+Copyright 2002-2013 by Audrey Tang E<lt>cpan@audreyt.orgE<gt>.
 
 This software is released under the MIT license cited below.
 

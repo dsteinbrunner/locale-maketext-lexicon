@@ -6,9 +6,7 @@ use base qw(Locale::Maketext::Extract::Plugin::Base);
 use Text::Haml;
 use Locale::Maketext::Extract::Plugin::Perl;
 
-=head1 NAME
-
-Locale::Maketext::Extract::Plugin::Haml - HAML format parser
+# ABSTRACT: HAML format parser
 
 =head1 SYNOPSIS
 
@@ -55,8 +53,8 @@ sub extract {
 
     # Checking for expr and text allows us to recognise
     # the types of HTML entries we are interested in.
-    my @texts =
-      map { $_->{text} } grep { $_->{expr} and $_->{text} } @{ $haml->tape };
+    my @texts = map { $_->{text} }
+        grep { $_->{expr} and $_->{text} } @{ $haml->tape };
 
     my $perl = Locale::Maketext::Extract::Plugin::Perl->new;
 

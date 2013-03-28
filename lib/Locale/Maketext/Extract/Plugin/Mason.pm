@@ -3,10 +3,7 @@ package Locale::Maketext::Extract::Plugin::Mason;
 use strict;
 use base qw(Locale::Maketext::Extract::Plugin::Base);
 
-=head1 NAME
-
-Locale::Maketext::Extract::Plugin::Mason - HTML::Mason (aka Mason 1) and Mason
-(aka Mason 2) format parser
+# ABSTRACT: HTML::Mason (aka Mason 1) and Mason (aka Mason 2) format parser
 
 =head1 SYNOPSIS
 
@@ -106,7 +103,7 @@ Audrey Tang E<lt>cpan@audreyt.orgE<gt>
 
 =head1 COPYRIGHT
 
-Copyright 2002-2008 by Audrey Tang E<lt>cpan@audreyt.orgE<gt>.
+Copyright 2002-2013 by Audrey Tang E<lt>cpan@audreyt.orgE<gt>.
 
 This software is released under the MIT license cited below.
 

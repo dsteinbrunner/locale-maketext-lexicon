@@ -3,9 +3,7 @@ package Locale::Maketext::Extract::Plugin::YAML;
 use strict;
 use base qw(Locale::Maketext::Extract::Plugin::Base);
 
-=head1 NAME
-
-Locale::Maketext::Extract::Plugin::YAML - YAML format parser
+# ABSTRACT: YAML format parser
 
 =head1 SYNOPSIS
 
@@ -93,7 +91,6 @@ or use the file_types to exclude that file.
 
 =cut
 
-
 sub file_types {
     return qw( yaml yml conf );
 }
@@ -105,12 +102,11 @@ sub extract {
     my $y = Locale::Maketext::Extract::Plugin::YAML::Extractor->new();
     $y->load($data);
 
-    foreach my $entry (@{$y->found}) {
-        $self->add_entry(@$entry)
+    foreach my $entry ( @{ $y->found } ) {
+        $self->add_entry(@$entry);
     }
 
 }
-
 
 package Locale::Maketext::Extract::Plugin::YAML::Extractor;
 
@@ -140,15 +136,16 @@ sub check_scalar {
 
 sub _parse_node {
     my $self = shift;
-    my $line = $self->{_start_line}||=length($self->preface) ? $self->line - 1 : $self->line;
+    my $line = $self->{_start_line}
+        ||= length( $self->preface ) ? $self->line - 1 : $self->line;
     my $node = $self->SUPER::_parse_node(@_);
     $self->{start_line} = 0;
-    return $self->check_scalar($node,$line);
+    return $self->check_scalar( $node, $line );
 }
 
 sub _parse_inline_seq {
     my $self = shift;
-    my $line = $self->{_start_line}||=$self->line;
+    my $line = $self->{_start_line} ||= $self->line;
     my $node = $self->SUPER::_parse_inline_seq(@_);
     foreach (@$node) {
         $self->check_scalar( $_, $line );
@@ -159,7 +156,7 @@ sub _parse_inline_seq {
 
 sub _parse_inline_mapping {
     my $self = shift;
-    my $line = $self->{_start_line}||=$self->line;
+    my $line = $self->{_start_line} ||= $self->line;
     my $node = $self->SUPER::_parse_inline_mapping(@_);
     foreach ( values %$node ) {
         $self->check_scalar( $_, $line );
@@ -172,7 +169,7 @@ sub _parse_inline_mapping {
 sub _parse_next_line {
 #===================================
     my $self = shift;
-    $self->{_start_line}  = $self->line
+    $self->{_start_line} = $self->line
         if $_[0] == YAML::Loader::COLLECTION;
     $self->SUPER::_parse_next_line(@_);
 }
@@ -217,7 +214,7 @@ Clinton Gormley E<lt>clint@traveljury.comE<gt>
 
 =head1 COPYRIGHT
 
-Copyright 2002-2008 by Audrey Tang E<lt>cpan@audreyt.orgE<gt>.
+Copyright 2002-2013 by Audrey Tang E<lt>cpan@audreyt.orgE<gt>.
 
 This software is released under the MIT license cited below.
 
@@ -242,6 +239,5 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 
 =cut
-
 
 1;

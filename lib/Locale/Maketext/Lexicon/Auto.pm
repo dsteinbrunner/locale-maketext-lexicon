@@ -1,11 +1,8 @@
 package Locale::Maketext::Lexicon::Auto;
-$Locale::Maketext::Lexicon::Auto::VERSION = '0.10';
 
 use strict;
 
-=head1 NAME
-
-Locale::Maketext::Lexicon::Auto - Auto fallback lexicon for Maketext
+# ABSTRACT: Auto fallback lexicon for Maketext
 
 =head1 SYNOPSIS
 
@@ -49,7 +46,7 @@ Audrey Tang E<lt>cpan@audreyt.orgE<gt>
 
 =head1 COPYRIGHT
 
-Copyright 2002, 2003, 2004, 2007 by Audrey Tang E<lt>cpan@audreyt.orgE<gt>.
+Copyright 2002 - 2013 by Audrey Tang E<lt>cpan@audreyt.orgE<gt>.
 
 This software is released under the MIT license cited below.
 

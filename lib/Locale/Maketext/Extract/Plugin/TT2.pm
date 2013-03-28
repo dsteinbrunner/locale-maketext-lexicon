@@ -5,9 +5,7 @@ use base qw(Locale::Maketext::Extract::Plugin::Base);
 use Template::Constants qw( :debug );
 use Template::Parser;
 
-=head1 NAME
-
-Locale::Maketext::Extract::Plugin::TT2 - Template Toolkit format parser
+# ABSTRACT: Template Toolkit format parser
 
 =head1 SYNOPSIS
 
@@ -150,12 +148,11 @@ sub extract {
     my $data = shift;
 
     $Template::Directive::PRETTY = 1;
-    my $parser =
-        Locale::Maketext::Extract::Plugin::TT2::Parser->new(
-               %PARSER_OPTIONS,
-               FACTORY => 'Locale::Maketext::Extract::Plugin::TT2::Directive',
-               FILE_INFO => 0,
-        );
+    my $parser = Locale::Maketext::Extract::Plugin::TT2::Parser->new(
+        %PARSER_OPTIONS,
+        FACTORY   => 'Locale::Maketext::Extract::Plugin::TT2::Directive',
+        FILE_INFO => 0,
+    );
     _init_overrides($parser);
 
     $parser->{extracted} = [];
@@ -289,16 +286,15 @@ sub ident {
 
         # Classic TT syntax [% l('...') %] or [% loc('....') %]
         if ( $first_literal
-             && ( $ident->[0] eq "'l'" or $ident->[0] eq "'loc'" ) )
+            && ( $ident->[0] eq "'l'" or $ident->[0] eq "'loc'" ) )
         {
-           $got_i18n = 1;
+            $got_i18n = 1;
         }
 
         # Mojolicious TT syntax [% c.l('...') %]
-        elsif ($ident->[0] eq "'c'" && $ident->[2] eq "'l'")
-        {
-           $got_i18n = 1;
-           splice(@$ident, 0, 2);
+        elsif ( $ident->[0] eq "'c'" && $ident->[2] eq "'l'" ) {
+            $got_i18n = 1;
+            splice( @$ident, 0, 2 );
         }
 
         if ($got_i18n) {
@@ -355,8 +351,8 @@ sub filter {
     $name = $name->[0];
     return ''
         unless $name eq "'l'"
-            or $name eq "'loc'"
-            or $name eq "'c.l'";
+        or $name eq "'loc'"
+        or $name eq "'c.l'";
     if ( strip_quotes($block) ) {
         $block =~ s/\\\\/\\/g;
         $args = join_args( $class->args($args) );
@@ -440,7 +436,7 @@ Andy Wardley http://wardley.org
 
 =head1 COPYRIGHT
 
-Copyright 2002-2008 by Audrey Tang E<lt>cpan@audreyt.orgE<gt>.
+Copyright 2002-2013 by Audrey Tang E<lt>cpan@audreyt.orgE<gt>.
 
 This software is released under the MIT license cited below.
 

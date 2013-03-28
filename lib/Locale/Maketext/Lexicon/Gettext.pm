@@ -1,11 +1,8 @@
 package Locale::Maketext::Lexicon::Gettext;
-$Locale::Maketext::Lexicon::Gettext::VERSION = '0.17';
 
 use strict;
 
-=head1 NAME
-
-Locale::Maketext::Lexicon::Gettext - PO and MO file parser for Maketext
+# ABSTRACT: PO and MO file parser for Maketext
 
 =head1 SYNOPSIS
 
@@ -134,35 +131,35 @@ sub parse {
 
     # Parse PO files
     foreach (@_) {
-        s/[\015\012]*\z//;                  # fix CRLF issues
+        s/[\015\012]*\z//;    # fix CRLF issues
 
         /^(msgid|msgstr) +"(.*)" *$/
-            ? do {                          # leading strings
+            ? do {            # leading strings
             $var{$1} = $2;
             $key = $1;
             }
             :
 
             /^"(.*)" *$/
-            ? do {                          # continued strings
+            ? do {            # continued strings
             $var{$key} .= $1;
             }
             :
 
             /^# (.*)$/
-            ? do {                          # user comments
+            ? do {            # user comments
             $var{msgcomment} .= $1 . "\n";
             }
             :
 
             /^#, +(.*) *$/
-            ? do {                          # control variables
+            ? do {            # control variables
             $var{$_} = 1 for split( /,\s+/, $1 );
             }
             :
 
             /^ *$/ && %var
-            ? do {                          # interpolate string escapes
+            ? do {            # interpolate string escapes
             $process->($_);
             }
             : ();
@@ -198,9 +195,9 @@ sub parse_metadata {
                             if $InputEncoding =~ /^utf-?8$/i;
                         $OutputEncoding = 'utf8'
                             if $OutputEncoding =~ /^utf-?8$/i;
-                        if ( Locale::Maketext::Lexicon::option('decode')
-                             and (   !$OutputEncoding
-                                   or $InputEncoding ne $OutputEncoding )
+                        if (Locale::Maketext::Lexicon::option('decode')
+                            and ( !$OutputEncoding
+                                or $InputEncoding ne $OutputEncoding )
                             )
                         {
                             require Encode::compat if $] < 5.007001;
@@ -259,8 +256,8 @@ sub _gettext_to_maketext {
 
 sub _unescape {
     join( ',',
-          map { /\A(\s*)%([1-9]\d*|\*)(\s*)\z/ ? "$1_$2$3" : $_ }
-              split( /,/, $_[0] ) );
+        map { /\A(\s*)%([1-9]\d*|\*)(\s*)\z/ ? "$1_$2$3" : $_ }
+            split( /,/, $_[0] ) );
 }
 
 # This subroutine was derived from Locale::Maketext::Gettext::readmo()
@@ -326,7 +323,7 @@ Audrey Tang E<lt>cpan@audreyt.orgE<gt>
 
 =head1 COPYRIGHT
 
-Copyright 2002, 2003, 2004, 2007 by Audrey Tang E<lt>cpan@audreyt.orgE<gt>.
+Copyright 2002-2013 by Audrey Tang E<lt>cpan@audreyt.orgE<gt>.
 
 This software is released under the MIT license cited below.
 

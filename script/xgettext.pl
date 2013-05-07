@@ -9,9 +9,8 @@ else {
     system(qq[perldoc "$0"]);
 }
 
-=head1 NAME
-
-xgettext.pl - Extract translatable strings from source
+# PODNAME:  xgettext.pl
+# ABSTRACT: Extract translatable strings from source
 
 =head1 SYNOPSIS
 

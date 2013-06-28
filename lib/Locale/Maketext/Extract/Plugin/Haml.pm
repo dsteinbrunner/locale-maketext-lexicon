@@ -99,7 +99,7 @@ systems and perl source files.
 
 Audrey Tang E<lt>cpan@audreyt.orgE<gt>
 
-Calum Halcrow E<lt>cpan@calumhalcrow.com<gt>
+Calum Halcrow E<lt>cpan@calumhalcrow.comE<gt>
 
 =head1 COPYRIGHT
 
